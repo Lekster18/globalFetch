@@ -2,10 +2,10 @@ const pool = require("../db/db");
 
 const addTrip = async (req, res) => {
   try {
-    const { start_date } = req.body;
+    const { country, city, start_date, end_date } = req.body;
     const newTrip = await pool.query(
-      "INSERT INTO trip (start_date) VALUES($1) RETURNING *",
-      [start_date]
+      "INSERT INTO trip (country, city, start_date, end_date) VALUES($1, $2, $3, $4) RETURNING *",
+      [country, city, start_date, end_date]
     );
     res.json(newTrip);
   } catch (err) {
