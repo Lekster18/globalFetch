@@ -1,26 +1,82 @@
-const Register = () => {
+import useFetch from "../hooks/useFetch";
+import { Form, Input } from "antd";
+import { useForm } from "antd/es/form/Form";
+
+type RegisterData = {
+  id: number;
+  name: string;
+  email: string;
+  country: string;
+  city: string;
+  role: string;
+  password: string;
+};
+
+const RegisterDisplay: React.FC = () => {
+  const fetchData = useFetch();
+  const [form] = useForm();
+
+  // console.log(form.getFieldsValue());
+
+  const onFinish = (vals: RegisterData) => {
+    console.log("onFinish", vals);
+  };
+  const addUser = async (vals: RegisterData) => {
+    console.log(form.getFieldsValue());
+    console.log(vals);
+    const res = await fetchData("/api/register", "POST", vals);
+
+    if (res.ok) {
+      alert("Successfully added user.");
+    } else {
+      alert(JSON.stringify(res.data));
+      console.log(res.data);
+    }
+  };
+
   return (
-    <div>
+    <Form form={form} onFinish={addUser}>
       <h1>Sign up</h1>
-      <h4>Username*</h4>
-      <input type="text" className="col-md-1" />
-      <h4>Email*</h4>
-      <input type="text" className="col-md-1" />
-      <h4>Password*</h4>
-      <input type="text" className="col-md-1" />
-      <h4>Confirm Password*</h4>
-      <input type="text" className="col-md-1" />
-      <h4>Country of Residence*</h4>
-      <input type="text" className="col-md-1" />
-      <h4>Role*</h4>
-      <select className="col-md-1">
-        <option value="">Select Role</option>
-        <option value="User">User</option>
-        <option value="Admin">Admin</option>
-      </select>
-      <button>Register</button>
-    </div>
+      <Form.Item label="Username" name={"name"} rules={[{ required: true }]}>
+        <Input />
+      </Form.Item>
+      <Form.Item
+        label="Password"
+        name={"password"}
+        rules={[{ required: true }]}
+      >
+        <input />
+      </Form.Item>
+      <Form.Item
+        label="Confirm Password"
+        // key={"password"}
+        rules={[{ required: true }]}
+      >
+        <input />
+      </Form.Item>
+      <Form.Item
+        label="Country of Residence"
+        name={"country"}
+        rules={[{ required: true }]}
+      >
+        <input />
+      </Form.Item>
+      <Form.Item label="City" name={"city"} rules={[{ required: true }]}>
+        <input />
+      </Form.Item>
+      <Form.Item label="Role" name={"role"} rules={[{ required: true }]}>
+        <select className="col-md-1">
+          <option value="">Select Role</option>
+          <option value="User">User</option>
+          <option value="Admin">Admin</option>
+        </select>
+      </Form.Item>
+      <Form.Item>
+        <button type="submit">Register</button>
+        <a href="/">back to login page</a>
+      </Form.Item>
+    </Form>
   );
 };
 
-export default Register;
+export default RegisterDisplay;
