@@ -1,30 +1,78 @@
-import { useState } from "react";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
+import { Button, Checkbox, Form, Input } from "antd";
+import useFetch from "../hooks/useFetch";
+import { useContext, useState } from "react";
+import UserContext from "../context/user";
+import { jwtDecode } from "jwt-decode";
 
-const Checkbox = (props) => {
-  return (
-    <input
-      type="checkbox"
-      checked={props.val}
-      onClick={() => {
-        props.setValue(!props.val);
-      }}
-    />
-  );
-};
+const Login: React.FC = () => {
+  const onFinish = (values: any) => {
+    console.log("Received values of form: ", values);
+  };
 
-const Login = () => {
-  const [val, setVal] = useState(false);
+  const fetchData = useFetch();
+
+  const userCtx = useContext(UserContext);
+  const [name, setName = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("");
+
+  const handleLogin = async () => {
+    const res = await fetchData("/auth/login", "POST", { name, password });
+
+    if (res.ok) {
+      userCtx.setAccessToken(res.data.access);
+      const decoded = jwtDecode(res.data.access);
+      userCtx.setRole(decoded.role);
+    } else {
+      alert(JSON.stringify(res.data));
+    }
+  };
+
   return (
-    <div>
-      <h1> Login </h1>
-      <input type="text" placeholder="Username" className="col-md-1" />
-      <input type="text" placeholder="Password" className="col-md-1" />
-      <button>Login</button>
-      <h4>Remember me</h4>
-      <Checkbox value={val} setValue={setVal}></Checkbox>
-      <h4>Not a member? Sign up </h4>
-      <a href="/register">here</a>
-    </div>
+    <Form
+      name="normal_login"
+      className="login-form"
+      initialValues={{ remember: true }}
+      onFinish={onFinish}
+    >
+      <h1>Login</h1>
+      <Form.Item
+        name="username"
+        rules={[{ required: true, message: "Please input your Username!" }]}
+      >
+        <Input
+          prefix={<UserOutlined className="site-form-item-icon" />}
+          placeholder="Username"
+        />
+      </Form.Item>
+      <Form.Item
+        name="password"
+        rules={[{ required: true, message: "Please input your Password!" }]}
+      >
+        <Input
+          prefix={<LockOutlined className="site-form-item-icon" />}
+          type="password"
+          placeholder="Password"
+        />
+      </Form.Item>
+      <Form.Item>
+        <Form.Item name="remember" valuePropName="checked" noStyle>
+          <Checkbox>Remember me</Checkbox>
+        </Form.Item>
+
+        <a className="login-form-forgot" href="">
+          Forgot password
+        </a>
+      </Form.Item>
+
+      <Form.Item>
+        <Button type="primary" htmlType="submit" className="login-form-button">
+          Log in
+        </Button>
+        Or <a href="/register">register now!</a>
+      </Form.Item>
+    </Form>
   );
 };
 
