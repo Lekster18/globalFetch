@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import UpdateModal from "./UpdateModal";
+import { deleteTrip } from "../hooks/api";
 
 interface TripProps {
   id: number;
@@ -7,8 +8,9 @@ interface TripProps {
   city: string;
   start_date: string;
   end_date: string;
-  getTrip: () => void;
-  deleteTrip: (id: number) => void;
+  refreshTrips: () => Promise<void>;
+  // getTrip: () => void;
+  // deleteTrip: (id: number) => void;
 }
 
 const Trip: React.FC<TripProps> = (props) => {
@@ -23,7 +25,7 @@ const Trip: React.FC<TripProps> = (props) => {
           city={props.city}
           start_date={props.start_date}
           end_date={props.end_date}
-          getTrip={props.getTrip}
+          refreshTrips={props.refreshTrips}
           setShowUpdateModal={setShowUpdateModal}
         />
       )}
@@ -36,7 +38,11 @@ const Trip: React.FC<TripProps> = (props) => {
         <>
           <button
             className="col-sm-1"
-            onClick={() => props.deleteTrip(props.id)}
+            onClick={() =>
+              deleteTrip(props.id).then(() => {
+                props.refreshTrips();
+              })
+            }
           >
             delete
           </button>

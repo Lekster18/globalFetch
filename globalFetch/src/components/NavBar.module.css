@@ -1,0 +1,28 @@
+.navbar {
+  height: 3rem;
+  background-color: pink;
+}
+.navbar nav {
+  height: 100%;
+}
+.navbar ul {
+  height: 100%;
+  display: flex;
+  justify-content: space-evenly;
+}
+.navbar li {
+  margin: 0 0rem;
+  width: 16rem;
+  padding: 0 1.25rem;
+}
+.navbar a {
+  color: white;
+  text-decoration: none;
+}
+.navbar a:hover,
+.navbar a:active,
+.navbar a.active {
+  color: whitesmoke;
+  padding-bottom: 0.25rem;
+  border-bottom: 4px solid whitesmoke;
+}

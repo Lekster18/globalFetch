@@ -40,6 +40,7 @@ const RequestDisplay: React.FC = () => {
       date: dateRef.current!.value,
       country: countryRef.current!.value,
       city: cityRef.current!.value,
+      // user_id:
     });
 
     if (res.ok) {
@@ -84,6 +85,12 @@ const RequestDisplay: React.FC = () => {
           className="col-md-1"
         />
         <input
+          type="date"
+          ref={dateRef}
+          placeholder="Date of collection"
+          className="col-md-1"
+        />
+        <input
           type="text"
           ref={countryRef}
           placeholder="Country"
@@ -93,12 +100,6 @@ const RequestDisplay: React.FC = () => {
           type="text"
           ref={cityRef}
           placeholder="City"
-          className="col-md-1"
-        />
-        <input
-          type="text"
-          ref={dateRef}
-          placeholder="Date of collection"
           className="col-md-1"
         />
         <button className="col-md-1" onClick={addRequest}>

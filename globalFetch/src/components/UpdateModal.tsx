@@ -10,7 +10,7 @@ interface OverLayProps {
   start_date: string;
   end_date: string;
   setShowUpdateModal: (show: boolean) => void;
-  getTrip: () => void;
+  refreshTrips: () => Promise<void>;
 }
 
 const OverLay: React.FC<OverLayProps> = (props) => {
@@ -29,7 +29,7 @@ const OverLay: React.FC<OverLayProps> = (props) => {
     });
 
     if (res.ok) {
-      props.getTrip();
+      await props.refreshTrips();
       props.setShowUpdateModal(false);
     } else {
       alert(JSON.stringify(res.data));
@@ -53,51 +53,49 @@ const OverLay: React.FC<OverLayProps> = (props) => {
 
   return (
     <div>
-      <div>
-        <br />
-        <br />
-        <div className="row">
-          <div className="col-md-1"></div>
-          <div className="col-md-1">Country</div>
-          <input ref={countryRef} type="text" className="col-md-3" />
-          <div className="col-md-1"></div>
-        </div>
+      <br />
+      <br />
+      <div className="row">
+        <div className="col-md-1"></div>
+        <div className="col-md-1">Country</div>
+        <input ref={countryRef} type="text" className="col-md-3" />
+        <div className="col-md-1"></div>
+      </div>
 
-        <div className="row">
-          <div className="col-md-1"></div>
-          <div className="col-md-1">City</div>
-          <input ref={cityRef} type="text" className="col-md-3" />
-          <div className="col-md-3"></div>
-        </div>
+      <div className="row">
+        <div className="col-md-1"></div>
+        <div className="col-md-1">City</div>
+        <input ref={cityRef} type="text" className="col-md-3" />
+        <div className="col-md-3"></div>
+      </div>
 
-        <div className="row">
-          <div className="col-md-1"></div>
-          <div className="col-md-1">Start Date</div>
-          <input ref={start_dateRef} type="text" className="col-md-3" />
-          <div className="col-md-3"></div>
-        </div>
+      <div className="row">
+        <div className="col-md-1"></div>
+        <div className="col-md-1">Start Date</div>
+        <input ref={start_dateRef} type="text" className="col-md-3" />
+        <div className="col-md-3"></div>
+      </div>
 
-        <div className="row">
-          <div className="col-md-1"></div>
-          <div className="col-md-1">End Date</div>
-          <input ref={end_dateRef} type="text" className="col-md-3" />
-          <div className="col-md-3"></div>
-        </div>
+      <div className="row">
+        <div className="col-md-1"></div>
+        <div className="col-md-1">End Date</div>
+        <input ref={end_dateRef} type="text" className="col-md-3" />
+        <div className="col-md-3"></div>
+      </div>
 
-        <br />
-        <div className="row">
-          <div className="col-md-3"></div>
-          <button onClick={() => updateTrip(props.id)} className="col-md-3">
-            update
-          </button>
-          <button
-            onClick={() => props.setShowUpdateModal(false)}
-            className="col-md-3"
-          >
-            cancel
-          </button>
-          <div className="col-md-3"></div>
-        </div>
+      <br />
+      <div className="row">
+        <div className="col-md-3"></div>
+        <button onClick={() => updateTrip(props.id)} className="col-md-3">
+          update
+        </button>
+        <button
+          onClick={() => props.setShowUpdateModal(false)}
+          className="col-md-3"
+        >
+          cancel
+        </button>
+        <div className="col-md-3"></div>
       </div>
     </div>
   );
@@ -105,7 +103,6 @@ const OverLay: React.FC<OverLayProps> = (props) => {
 
 interface UpdateModalProps extends OverLayProps {
   setShowUpdateModal: (show: boolean) => void;
-  getTrip: () => void;
 }
 
 const UpdateModal: React.FC<UpdateModalProps> = (props) => {
@@ -119,7 +116,7 @@ const UpdateModal: React.FC<UpdateModalProps> = (props) => {
           start_date={props.start_date}
           end_date={props.end_date}
           setShowUpdateModal={props.setShowUpdateModal}
-          getTrip={props.getTrip}
+          refreshTrips={props.refreshTrips}
         />,
         document.querySelector("#modal-root")!
       )}

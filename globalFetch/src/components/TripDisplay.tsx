@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import Trip from "./Trip";
 import useFetch from "../hooks/useFetch";
+import { addTrip, getTrip, AddTripReq } from "../hooks/api";
 
-interface TripData {
+export interface TripData {
   id: number;
   country: string;
   city: string;
@@ -12,7 +13,8 @@ interface TripData {
 }
 
 const TripDisplay: React.FC = () => {
-  const [trip, setTrip] = useState<TripData[]>([]);
+  //take in prop to pass in to line 30 in addTripReq
+  const [trips, setTrips] = useState<TripData[]>([]);
   const fetchData = useFetch();
 
   const countryRef = useRef<HTMLInputElement>(null);
@@ -20,45 +22,66 @@ const TripDisplay: React.FC = () => {
   const start_dateRef = useRef<HTMLInputElement>(null);
   const end_dateRef = useRef<HTMLInputElement>(null);
 
-  const getTrip = async () => {
-    const res = await fetchData("/api/trip", "GET", undefined);
-
-    if (res.ok) {
-      setTrip(res.data);
-    } else {
-      alert(JSON.stringify(res.data));
-      console.log(res.data);
-    }
+  const addTripReq: AddTripReq = {
+    country: countryRef.current?.value ?? "",
+    city: cityRef.current?.value ?? "",
+    start_date: start_dateRef?.current?.value ?? "",
+    end_date: end_dateRef?.current?.value ?? "",
+    // user_id: props.name
   };
 
-  const addTrip = async () => {
-    const res = await fetchData("/api/trip", "POST", {
-      country: countryRef.current!.value,
-      city: cityRef.current!.value,
-      start_date: start_dateRef.current!.value,
-      end_date: end_dateRef.current!.value,
-    });
+  // const getTrip = async () => {
+  //   const res = await fetchData("/api/trip", "GET", undefined);
 
-    if (res.ok) {
-      getTrip();
-    } else {
-      alert(JSON.stringify(res.data));
-      console.log(res.data);
-    }
-  };
+  //   if (res.ok) {
+  //     setTrips(res.data);
+  //   } else {
+  //     alert(JSON.stringify(res.data));
+  //     console.log(res.data);
+  //   }
+  // };
 
-  const deleteTrip = async (id: number) => {
-    const res = await fetchData("/api/trip/" + id, "DELETE", undefined);
+  // const addTrip = async () => {
+  //   const res = await fetchData("/api/trip", "POST", {
+  //     country: countryRef.current!.value,
+  //     city: cityRef.current!.value,
+  //     start_date: start_dateRef.current!.value,
+  //     end_date: end_dateRef.current!.value,
+  //   });
+
+  //   if (res.ok) {
+  //     getTrip();
+  //   } else {
+  //     alert(JSON.stringify(res.data));
+  //     console.log(res.data);
+  //   }
+  // };
+
+  // const deleteTrip = async (id: number) => {
+  //   const res = await fetchData("/api/trip/" + id, "DELETE", undefined);
+  //   if (res.ok) {
+  //     getTrip();
+  //   } else {
+  //     alert(JSON.stringify(res.data));
+  //     console.log(res.data);
+  //   }
+  // };
+
+  const refreshTrips = async (): Promise<void> => {
+    const res = await getTrip();
     if (res.ok) {
-      getTrip();
-    } else {
-      alert(JSON.stringify(res.data));
-      console.log(res.data);
+      setTrips(res.data);
     }
   };
 
   useEffect(() => {
-    getTrip();
+    const fetch = async () => {
+      const res = await getTrip();
+      if (res.ok) {
+        setTrips(res.data);
+      }
+    };
+    fetch();
   }, []);
 
   return (
@@ -81,18 +104,25 @@ const TripDisplay: React.FC = () => {
           className="col-md-1"
         />
         <input
-          type="text"
+          type="date"
           ref={start_dateRef}
           placeholder="Start Date"
           className="col-md-1"
         />
         <input
-          type="text"
+          type="date"
           ref={end_dateRef}
           placeholder="End Date"
           className="col-md-1"
         />
-        <button className="col-md-1" onClick={addTrip}>
+        <button
+          className="col-md-1"
+          onClick={() =>
+            addTrip(addTripReq).then(() => {
+              refreshTrips();
+            })
+          }
+        >
           add
         </button>
       </div>
@@ -106,15 +136,16 @@ const TripDisplay: React.FC = () => {
         <div className="col-md-1">Travel period</div>
       </div>
 
-      {trip.map((item) => (
+      {trips.map((item) => (
         <Trip
           id={item.id}
           country={item.country}
           city={item.city}
           start_date={item.start_date}
           end_date={item.end_date}
-          getTrip={getTrip}
-          deleteTrip={deleteTrip}
+          refreshTrips={refreshTrips}
+          // getTrip={getTrip}
+          // deleteTrip={deleteTrip}
         />
       ))}
     </div>
