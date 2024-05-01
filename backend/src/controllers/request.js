@@ -2,13 +2,9 @@ const pool = require("../db/db");
 
 const addRequest = async (req, res) => {
   try {
-    const { description, price, date, country, city } = req.body;
-    console.log(
-      "INSERT INTO request (description, price, date, country, city) VALUES($1, $2, $3, $4, $5) RETURNING *",
-      [description, price, date, country, city]
-    );
+    const { description, price, date, country, city, user_id } = req.body;
     const newRequest = await pool.query(
-      "INSERT INTO request(description, price, date, country, city) VALUES($1, $2, $3, $4, $5) RETURNING *",
+      "INSERT INTO request(description, price, date, country, city, user_id) VALUES($1, $2, $3, $4, $5) RETURNING *",
       [description, parseInt(price, 10), date, country, city]
     );
     res.json(newRequest);

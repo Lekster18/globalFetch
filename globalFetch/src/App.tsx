@@ -6,7 +6,6 @@ import TripDisplay from "./components/TripDisplay";
 import RequestDisplay from "./components/RequestDisplay";
 import RegisterDisplay from "./pages/Register";
 import BrowseDisplay from "./pages/Browse";
-import Transactions from "./pages/Transaction";
 import { useState } from "react";
 import UserContext from "./context/user";
 
@@ -27,7 +26,6 @@ function App() {
               <Route path="/browse" element={<BrowseDisplay name={name} />} />
               <Route path="/trip" element={<TripDisplay />} />
               <Route path="/request" element={<RequestDisplay />} />
-              <Route path="/transaction" element={<Transactions />} />
               <Route path="/" element={<Login />} />
             </Routes>
           </BrowserRouter>
