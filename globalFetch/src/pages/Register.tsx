@@ -24,7 +24,7 @@ const RegisterDisplay: React.FC = () => {
   const addUser = async (vals: RegisterData) => {
     console.log(form.getFieldsValue());
     console.log(vals);
-    const res = await fetchData("/api/register", "POST", vals);
+    const res = await fetchData("/auth/register", "POST", vals);
 
     if (res.ok) {
       alert("Successfully added user.");

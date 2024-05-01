@@ -4,26 +4,30 @@ import useFetch from "../hooks/useFetch";
 import { useContext, useState } from "react";
 import UserContext from "../context/user";
 import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
+
+type LoginData = {
+  name: string;
+  password: string;
+};
 
 const Login: React.FC = () => {
-  const onFinish = (values: any) => {
-    console.log("Received values of form: ", values);
-  };
-
   const fetchData = useFetch();
 
   const userCtx = useContext(UserContext);
-  const [name, setName = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setRole] = useState("");
+  const nav = useNavigate();
 
-  const handleLogin = async () => {
-    const res = await fetchData("/auth/login", "POST", { name, password });
+  const handleLogin = async (vals: LoginData) => {
+    console.log(vals);
+    const res = await fetchData("/auth/login", "POST", vals);
 
     if (res.ok) {
+      console.log(res);
       userCtx.setAccessToken(res.data.access);
-      const decoded = jwtDecode(res.data.access);
+      const decoded: any = jwtDecode(res.data.access);
       userCtx.setRole(decoded.role);
+      userCtx.setName(decoded.name);
+      nav("/browse");
     } else {
       alert(JSON.stringify(res.data));
     }
@@ -34,11 +38,11 @@ const Login: React.FC = () => {
       name="normal_login"
       className="login-form"
       initialValues={{ remember: true }}
-      onFinish={onFinish}
+      onFinish={handleLogin}
     >
       <h1>Login</h1>
       <Form.Item
-        name="username"
+        name="name"
         rules={[{ required: true, message: "Please input your Username!" }]}
       >
         <Input
