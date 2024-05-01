@@ -35,10 +35,10 @@ const getTripById = async (req, res) => {
 const updateTrip = async (req, res) => {
   try {
     const { id } = req.params;
-    const { start_date } = req.body;
+    const { country, city, start_date, end_date } = req.body;
     const updateTrip = await pool.query(
-      "UPDATE trip SET start_date = $1 WHERE id = $2",
-      [start_date, id]
+      "UPDATE trip SET country = $1, city =$2, start_date=$3, end_date=$4 WHERE id = $5",
+      [country, city, start_date, end_date, id]
     );
     res.json("Trip updated");
   } catch (err) {
