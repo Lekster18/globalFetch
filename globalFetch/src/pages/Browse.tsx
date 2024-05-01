@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Card, Col, Row } from "antd";
+import { Card, Col, Row, Tabs } from "antd";
 import useFetch from "../hooks/useFetch";
+
+const { TabPane } = Tabs;
 
 interface BrowseProps {
   name: string;
@@ -51,51 +53,45 @@ const BrowseDisplay: React.FC<BrowseProps> = (props) => {
     }
   };
 
-  // const addToTransaction = async() => {
-  //   const res = await fetchData("/api/transaction", "POST", {
-
-  //   })
-  // }
-
-  //need to add more parameters so that it aligns with table
-  // const addTransactionRequest = async (buyer_name: string, seller_name:string,) => {
-  // //use trip id go back to trip table to get seller user id
-  //   const res = await fetchData("/api/transaction", "POST", {
-
-  //     buyer_name,
-  //     seller_name:
-  //   });
-  // };
-
   useEffect(() => {
     getRequest();
     getTrip();
   }, []);
 
   return (
-    <Row gutter={16}>
-      {trip.map((item) => (
-        <Col span={8} key={item.id}>
-          <Card title={`${item.country} - ${item.city}`} bordered={false}>
-            <p>Start Date: {item.start_date}</p>
-            <p>End Date: {item.end_date}</p>
-            <p>Name: {item.user_name}</p>
-            <button>Make request!</button>
-            {/* onClick={() => addTransactionRequest(props.name) */}
-          </Card>
-        </Col>
-      ))}
-      {request.map((item) => (
-        <Col span={8} key={item.id}>
-          <Card title={`${item.country} - ${item.city}`} bordered={false}>
-            <p>Description: {item.description}</p>
-            <p>Price: {item.price}</p>
-            <p>Collection Date: {item.date}</p>
-            <button>I will help you buy it!</button>
-          </Card>
-        </Col>
-      ))}
-    </Row>
+    <>
+      <h1>Browse</h1>
+      <Tabs defaultActiveKey="1">
+        <TabPane tab="Trips" key="1">
+          <Row gutter={16}>
+            {trip.map((item) => (
+              <Col span={8} key={item.id}>
+                <Card title={`${item.country} - ${item.city}`} bordered={false}>
+                  <p>Start Date: {item.start_date}</p>
+                  <p>End Date: {item.end_date}</p>
+                  <p>Name: {item.user_name}</p>
+                  <button>Make request!</button>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </TabPane>
+        <TabPane tab="Requests" key="2">
+          <Row gutter={16}>
+            {request.map((item) => (
+              <Col span={8} key={item.id}>
+                <Card title={`${item.country} - ${item.city}`} bordered={false}>
+                  <p>Description: {item.description}</p>
+                  <p>Price: {item.price}</p>
+                  <p>Collection Date: {item.date}</p>
+                  <button>I will help you buy it!</button>
+                </Card>
+              </Col>
+            ))}
+          </Row>
+        </TabPane>
+      </Tabs>
+    </>
   );
 };
 
