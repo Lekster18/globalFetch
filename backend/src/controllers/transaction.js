@@ -38,12 +38,11 @@ const getTransaction = async (req, res) => {
 const updateTransaction = async (req, res) => {
   try {
     const { id } = req.params;
-    const { status } = req.body;
     const updateTransaction = await pool.query(
-      "UPDATE Transaction SET status='approved' WHERE id = $1",
-      [status, id]
+      "UPDATE Transaction SET status='approved' WHERE id = $1 RETURNING *",
+      [id]
     );
-    res.json("Request updated");
+    res.json(updateTransaction.rows[0]);
   } catch (err) {
     console.error(err.mesaage);
   }
