@@ -2,10 +2,10 @@ const pool = require("../db/db");
 
 const addTransaction = async (req, res) => {
   try {
-    const { seller_name, buyer_name, request_id } = req.body;
+    const { seller_name, buyer_name, request_id, status } = req.body;
     const newTransaction = await pool.query(
-      "INSERT INTO transaction (seller_name, buyer_name, request_id) VALUES($1, $2, $3) RETURNING *",
-      [seller_name, buyer_name, request_id]
+      "INSERT INTO transaction (seller_name, buyer_name, request_id, status) VALUES($1, $2, $3, $4) RETURNING *",
+      [seller_name, buyer_name, request_id, status]
     );
     res.json(newTransaction);
   } catch (err) {
@@ -26,4 +26,31 @@ const getUserTransaction = async (req, res) => {
   }
 };
 
-module.exports = { addTransaction, getUserTransaction };
+const getTransaction = async (req, res) => {
+  try {
+    const allTransactions = await pool.query("SELECT * FROM transaction");
+    res.json(allTransactions.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
+const updateTransaction = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+    const updateTransaction = await pool.query(
+      "UPDATE Transaction SET status='approved' WHERE id = $1",
+      [status, id]
+    );
+    res.json("Request updated");
+  } catch (err) {
+    console.error(err.mesaage);
+  }
+};
+module.exports = {
+  addTransaction,
+  getUserTransaction,
+  getTransaction,
+  updateTransaction,
+};

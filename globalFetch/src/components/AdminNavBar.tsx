@@ -13,13 +13,23 @@ const AdminNavBar = () => {
     <header className={styles.navbar}>
       <nav>
         <ul>
-          <NavLink
-            className={(navData) => (navData.isActive ? styles.active : "")}
-            to="/"
-            onClick={handleLogout}
-          >
-            Logout
-          </NavLink>
+          <li>
+            <NavLink
+              className={(navData) => (navData.isActive ? styles.active : "")}
+              to="/transactions"
+            >
+              Transactions
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              className={(navData) => (navData.isActive ? styles.active : "")}
+              to="/"
+              onClick={handleLogout}
+            >
+              Logout
+            </NavLink>
+          </li>
         </ul>
       </nav>
     </header>

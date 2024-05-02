@@ -50,7 +50,6 @@ const BrowseDisplay: React.FC = () => {
   };
 
   const getTrip = async () => {
-    console.log(userCtx.accessToken);
     const res = await fetchData(
       "/api/trip",
       "GET",
@@ -78,6 +77,7 @@ const BrowseDisplay: React.FC = () => {
         seller_name: userCtx.name,
         buyer_name: buyer_name,
         request_id: request_id,
+        status: "pending",
       },
       userCtx.accessToken
     );

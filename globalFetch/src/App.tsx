@@ -11,6 +11,7 @@ import UserContext from "./context/user";
 import Accounts from "./pages/Account";
 import AdminNavBar from "./components/AdminNavBar";
 import TransactionDisplay from "./pages/Transaction";
+import TransactionAdmin from "./pages/AdminTransaction";
 
 function App() {
   const [accessToken, setAccessToken] = useState<string>("");
@@ -39,6 +40,7 @@ function App() {
             <AdminNavBar />
             <Routes>
               <Route path="/account" element={<Accounts />} />
+              <Route path="/transactions" element={<TransactionAdmin />} />
               <Route path="/" element={<Login />} />
             </Routes>
           </BrowserRouter>
