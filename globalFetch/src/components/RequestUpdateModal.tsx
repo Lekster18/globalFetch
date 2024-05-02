@@ -1,6 +1,6 @@
 import { useContext, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
-// import styles from "./Modal.module.css";
+import styles from "./Modal.module.css";
 import useFetch from "../hooks/useFetch";
 import UserContext from "../context/user";
 
@@ -62,11 +62,11 @@ const RequestOverLay: React.FC<RequestOverLayProps> = (props) => {
       descriptionRef.current.value = props.description;
     }
   }, [props.country, props.city, props.date, props.price, props.description]);
+
   return (
-    <div>
-      <div>
-        <br />
-        <br />
+    <div className={styles.overlay}>
+      <div className={styles.modalContent}>
+        <div className={styles.modalHeader}>Update Request</div>
         <div className="row">
           <div className="col-md-1"></div>
           <div className="col-md-1">Item description</div>
@@ -106,13 +106,13 @@ const RequestOverLay: React.FC<RequestOverLayProps> = (props) => {
         <div className="row">
           <div className="col-md-3"></div>
           <button onClick={() => updateRequest(props.id)} className="col-md-3">
-            update
+            Update
           </button>
           <button
             onClick={() => props.setShowReqUpdateModal(false)}
             className="col-md-3"
           >
-            cancel
+            Cancel
           </button>
           <div className="col-md-3"></div>
         </div>

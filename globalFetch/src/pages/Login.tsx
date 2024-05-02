@@ -1,7 +1,7 @@
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Form, Input } from "antd";
 import useFetch from "../hooks/useFetch";
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import UserContext from "../context/user";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "react-router-dom";
@@ -21,9 +21,7 @@ const Login: React.FC = () => {
     const res = await fetchData("/auth/login", "POST", vals, "");
 
     if (res.ok) {
-      console.log(res);
       userCtx.setAccessToken(res.data.access);
-      console.log(userCtx.accessToken);
       const decoded: any = jwtDecode(res.data.access);
       userCtx.setRole(decoded.role);
       userCtx.setName(decoded.name);
@@ -43,6 +41,7 @@ const Login: React.FC = () => {
       className="login-form"
       initialValues={{ remember: true }}
       onFinish={handleLogin}
+      style={{ maxWidth: "300px", margin: "auto" }}
     >
       <h1>Login</h1>
       <Form.Item
@@ -65,19 +64,10 @@ const Login: React.FC = () => {
         />
       </Form.Item>
       <Form.Item>
-        <Form.Item name="remember" valuePropName="checked" noStyle>
-          <Checkbox>Remember me</Checkbox>
-        </Form.Item>
-
-        <a className="login-form-forgot" href="">
-          Forgot password
-        </a>
-      </Form.Item>
-
-      <Form.Item>
         <Button type="primary" htmlType="submit" className="login-form-button">
           Log in
         </Button>
+        <br />
         Or <a href="/register">register now!</a>
       </Form.Item>
     </Form>

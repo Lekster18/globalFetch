@@ -1,0 +1,25 @@
+.requestContainer {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.requestItem {
+  flex: 1;
+}
+
+.requestButton {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #1890ff;
+  color: #fff;
+}
+
+.requestButton:hover {
+  background-color: #40a9ff;
+}

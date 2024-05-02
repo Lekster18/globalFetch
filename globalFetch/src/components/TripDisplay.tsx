@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import Trip from "./Trip";
-// import { addTrip, getTrip, AddTripReq } from "../hooks/api";
 import UserContext from "../context/user";
 import useFetch from "../hooks/useFetch";
 
@@ -10,6 +9,7 @@ interface TripData {
   city: string;
   start_date: string;
   end_date: string;
+  getUserTrip: () => void;
   deleteTrip: (id: number) => void;
 }
 
@@ -23,14 +23,6 @@ const TripDisplay: React.FC = () => {
   const start_dateRef = useRef<HTMLInputElement>(null);
   const end_dateRef = useRef<HTMLInputElement>(null);
 
-  // const addTripReq: AddTripReq = {
-  //   country: countryRef.current?.value ?? "",
-  //   city: cityRef.current?.value ?? "",
-  //   start_date: start_dateRef?.current?.value ?? "",
-  //   end_date: end_dateRef?.current?.value ?? "",
-  //   user_name: userCtx.name,
-  // };
-
   const getUserTrip = async () => {
     const res = await fetchData(
       "/api/trip/" + userCtx.name,
@@ -40,7 +32,6 @@ const TripDisplay: React.FC = () => {
     );
 
     if (res.ok) {
-      console.log(res.data);
       setTrips(res.data);
     } else {
       alert(JSON.stringify(res.data));
@@ -85,13 +76,6 @@ const TripDisplay: React.FC = () => {
     }
   };
 
-  // const refreshTrips = async (): Promise<void> => {
-  //   const res = await getTrip();
-  //   if (res.ok) {
-  //     setTrips(res.data);
-  //   }
-  // };
-
   useEffect(() => {
     getUserTrip();
   }, []);
@@ -115,12 +99,14 @@ const TripDisplay: React.FC = () => {
           placeholder="City"
           className="col-md-1"
         />
+        Travel period: Start Date
         <input
           type="date"
           ref={start_dateRef}
           placeholder="Start Date"
           className="col-md-1"
         />
+        End Date
         <input
           type="date"
           ref={end_dateRef}
@@ -135,7 +121,7 @@ const TripDisplay: React.FC = () => {
       <br />
       <br />
 
-      <div className="row">
+      <div className="row" style={{ display: "flex" }}>
         <div className="col-md-1">Country</div>
         <div className="col-md-1">City</div>
         <div className="col-md-1">Travel period</div>
@@ -148,7 +134,6 @@ const TripDisplay: React.FC = () => {
           city={item.city}
           start_date={item.start_date}
           end_date={item.end_date}
-          // refreshTrips={refreshTrips}
           getUserTrip={getUserTrip}
           deleteTrip={deleteTrip}
         />

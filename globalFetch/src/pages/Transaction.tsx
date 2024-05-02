@@ -67,6 +67,8 @@ const Transactions: React.FC = () => {
             <p>
               {item.seller_name} offered to buy from {item.country}-{item.city}
             </p>
+            <br />
+            <br />
           </div>
         ))}
       </Card>

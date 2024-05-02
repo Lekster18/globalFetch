@@ -19,8 +19,6 @@ const RegisterDisplay: React.FC = () => {
   const [form] = useForm();
 
   const addUser = async (vals: RegisterData) => {
-    console.log(form.getFieldsValue());
-    console.log(vals);
     const res = await fetchData("/auth/register", "POST", vals, "");
 
     if (res.ok) {

@@ -35,7 +35,6 @@ const RequestDisplay: React.FC = () => {
     );
 
     if (res.ok) {
-      console.log(res.data);
       setRequest(res.data);
     } else {
       alert(JSON.stringify(res.data));
@@ -105,12 +104,6 @@ const RequestDisplay: React.FC = () => {
           className="col-md-1"
         />
         <input
-          type="date"
-          ref={dateRef}
-          placeholder="Date of collection"
-          className="col-md-1"
-        />
-        <input
           type="text"
           ref={countryRef}
           placeholder="Country"
@@ -122,6 +115,13 @@ const RequestDisplay: React.FC = () => {
           placeholder="City"
           className="col-md-1"
         />
+        Collection Date:
+        <input
+          type="date"
+          ref={dateRef}
+          placeholder="Date of collection"
+          className="col-md-1"
+        />
         <button className="col-md-1" onClick={addRequest}>
           add
         </button>
@@ -130,12 +130,12 @@ const RequestDisplay: React.FC = () => {
       <br />
       <br />
 
-      <div className="row">
-        <div className="col-md-1">Item Description</div>
-        <div className="col-md-1">Price</div>
+      <div className="row" style={{ display: "flex" }}>
+        <div className="col-md-3">Item Description</div>
+        <div className="col-md-2">Price</div>
+        <div className="col-md-3">Collection date</div>
         <div className="col-md-1">Country</div>
         <div className="col-md-1">City</div>
-        <div className="col-md-1">Collection date</div>
       </div>
 
       {request.map((item) => (

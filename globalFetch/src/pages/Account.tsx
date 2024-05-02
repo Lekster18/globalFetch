@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import useFetch from "../hooks/useFetch";
 import UserContext from "../context/user";
+import "./Account.module.css";
 
 interface User {
   id: number;
   name: string;
-  email: string;
   country: string;
   city: string;
   role: string;
@@ -37,7 +37,6 @@ const Accounts: React.FC = () => {
   };
 
   const deleteUser = async (id: number) => {
-    console.log("Deleting user with id:", id);
     const res = await fetchData(
       "/auth/users/" + id,
       "DELETE",
@@ -53,38 +52,37 @@ const Accounts: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Admin Page</h1>
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Country</th>
-            <th>City</th>
-            <th>Role</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{user.country}</td>
-              <td>{user.city}</td>
-              <td>{user.role}</td>
-              <td>
-                <button onClick={() => deleteUser(user.id)}>Delete</button>
-              </td>
+    <div className="container">
+      <div className="table-container">
+        <h1>Admin Page</h1>
+        <table>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Country</th>
+              <th>City</th>
+              <th>Role</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>{user.id}</td>
+                <td>{user.name}</td>
+                <td>{user.country}</td>
+                <td>{user.city}</td>
+                <td>{user.role}</td>
+                <td>
+                  <button onClick={() => deleteUser(user.id)}>Delete</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
-
 export default Accounts;

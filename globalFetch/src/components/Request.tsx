@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import RequestUpdateModal from "./RequestUpdateModal";
+import styles from "./Fav.module.css";
 
 interface RequestProps {
   id: number;
@@ -30,27 +31,24 @@ const Request: React.FC<RequestProps> = (props) => {
         />
       )}
 
-      <div>
-        <div className="col-sm-2">{props.country}</div>
-        <div className="col-sm-2">{props.city}</div>
-        <div className="col-sm-2">{props.description}</div>
-        <div className="col-sm-1">{props.date}</div>
-        <div className="col-sm-2">{props.price}</div>
-        <>
-          <button
-            className="col-sm-1"
-            onClick={() => props.deleteRequest(props.id)}
-          >
-            delete
-          </button>
-
-          <button
-            className="col-sm-1"
-            onClick={() => setShowReqUpdateModal(true)}
-          >
-            update
-          </button>
-        </>
+      <div className={styles.requestContainer}>
+        <div className={styles.requestItem}>{props.country}</div>
+        <div className={styles.requestItem}>{props.city}</div>
+        <div className={styles.requestItem}>{props.description}</div>
+        <div className={styles.requestItem}>{props.date}</div>
+        <div className={styles.requestItem}>{props.price}</div>
+        <button
+          className={`${styles.requestButton} ${styles.requestItem}`}
+          onClick={() => props.deleteRequest(props.id)}
+        >
+          Delete
+        </button>
+        <button
+          className={`${styles.requestButton} ${styles.requestItem}`}
+          onClick={() => setShowReqUpdateModal(true)}
+        >
+          Update
+        </button>
       </div>
     </>
   );
