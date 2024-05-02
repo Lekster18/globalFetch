@@ -1,8 +1,14 @@
 import { NavLink } from "react-router-dom";
 import styles from "./NavBar.module.css";
+import { useContext } from "react";
+import UserContext from "../context/user";
 
 const AdminNavBar = () => {
-  //NavBar display
+  const userCtx = useContext(UserContext);
+  const handleLogout = () => {
+    userCtx.setRole("");
+    userCtx.setAccessToken("");
+  };
   return (
     <header className={styles.navbar}>
       <nav>
@@ -10,6 +16,7 @@ const AdminNavBar = () => {
           <NavLink
             className={(navData) => (navData.isActive ? styles.active : "")}
             to="/"
+            onClick={handleLogout}
           >
             Logout
           </NavLink>
