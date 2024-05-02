@@ -25,7 +25,6 @@ const RequestDisplay: React.FC = () => {
   const descriptionRef = useRef<HTMLInputElement>(null);
   const priceRef = useRef<HTMLInputElement>(null);
   const dateRef = useRef<HTMLInputElement>(null);
-  console.log(request);
 
   const getUserRequest = async () => {
     const res = await fetchData(

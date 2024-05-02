@@ -61,8 +61,12 @@ const Transactions: React.FC = () => {
       >
         {pendingTransactions.map((item) => (
           <div key={item.id}>
-            <p>{item.buyer_name} made a request!</p>
-            <p>{item.seller_name} offered to buy</p>
+            <p>
+              {item.buyer_name} made a request to buy {item.description}{" "}
+            </p>
+            <p>
+              {item.seller_name} offered to buy from {item.country}-{item.city}
+            </p>
           </div>
         ))}
       </Card>

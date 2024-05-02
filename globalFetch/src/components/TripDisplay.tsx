@@ -57,6 +57,7 @@ const TripDisplay: React.FC = () => {
         city: cityRef.current!.value,
         start_date: start_dateRef.current!.value,
         end_date: end_dateRef.current!.value,
+        user_name: userCtx.name,
       },
       userCtx.accessToken
     );

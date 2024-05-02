@@ -70,13 +70,14 @@ const BrowseDisplay: React.FC = () => {
     nav("/request");
   };
 
-  const addTransaction = async (buyer_name: string) => {
+  const addTransaction = async (buyer_name: string, request_id: number) => {
     const res = await fetchData(
       "/api/transaction",
       "POST",
       {
         seller_name: userCtx.name,
         buyer_name: buyer_name,
+        request_id: request_id,
       },
       userCtx.accessToken
     );
@@ -122,7 +123,9 @@ const BrowseDisplay: React.FC = () => {
                   <p>Price: {item.price}</p>
                   <p>Collection Date: {item.date}</p>
                   <p>Name: {item.user_name}</p>
-                  <button onClick={() => addTransaction(item.user_name)}>
+                  <button
+                    onClick={() => addTransaction(item.user_name, item.id)}
+                  >
                     I will help you buy it!
                   </button>
                 </Card>
