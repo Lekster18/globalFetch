@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 // import styles from "./Modal.module.css";
 import useFetch from "../hooks/useFetch";
+import UserContext from "../context/user";
 
 interface RequestOverLayProps {
   id: number;
@@ -11,10 +12,11 @@ interface RequestOverLayProps {
   country: string;
   city: string;
   setShowReqUpdateModal: (show: boolean) => void;
-  getRequest: () => void;
+  getUserRequest: () => void;
 }
 
 const RequestOverLay: React.FC<RequestOverLayProps> = (props) => {
+  const userCtx = useContext(UserContext);
   const fetchData = useFetch();
   const countryRef = useRef<HTMLInputElement>(null);
   const cityRef = useRef<HTMLInputElement>(null);
@@ -23,16 +25,21 @@ const RequestOverLay: React.FC<RequestOverLayProps> = (props) => {
   const dateRef = useRef<HTMLInputElement>(null);
 
   const updateRequest = async (id: number) => {
-    const res = await fetchData(`/api/request/${id}`, "PUT", {
-      country: countryRef.current!.value,
-      city: cityRef.current!.value,
-      description: descriptionRef.current!.value,
-      price: priceRef.current!.value,
-      date: dateRef.current!.value,
-    });
+    const res = await fetchData(
+      "/api/request/" + id,
+      "PUT",
+      {
+        country: countryRef.current!.value,
+        city: cityRef.current!.value,
+        description: descriptionRef.current!.value,
+        price: priceRef.current!.value,
+        date: dateRef.current!.value,
+      },
+      userCtx.accessToken
+    );
 
     if (res.ok) {
-      props.getRequest();
+      props.getUserRequest();
       props.setShowReqUpdateModal(false);
     } else {
       alert(JSON.stringify(res.data));
@@ -116,7 +123,7 @@ const RequestOverLay: React.FC<RequestOverLayProps> = (props) => {
 
 interface RequestUpdateModalProps extends RequestOverLayProps {
   setShowReqUpdateModal: (show: boolean) => void;
-  getRequest: () => void;
+  getUserRequest: () => void;
 }
 
 const RequestUpdateModal: React.FC<RequestUpdateModalProps> = (props) => {
@@ -131,7 +138,7 @@ const RequestUpdateModal: React.FC<RequestUpdateModalProps> = (props) => {
           price={props.price}
           description={props.description}
           setShowReqUpdateModal={props.setShowReqUpdateModal}
-          getRequest={props.getRequest}
+          getUserRequest={props.getUserRequest}
         />,
         document.querySelector("#modal-root")!
       )}

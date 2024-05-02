@@ -1,7 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useContext, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 // import styles from "./Modal.module.css";
 import useFetch from "../hooks/useFetch";
+import UserContext from "../context/user";
 
 interface OverLayProps {
   id: number;
@@ -10,26 +11,32 @@ interface OverLayProps {
   start_date: string;
   end_date: string;
   setShowUpdateModal: (show: boolean) => void;
-  refreshTrips: () => Promise<void>;
+  // refreshTrips: () => Promise<void>;
 }
 
 const OverLay: React.FC<OverLayProps> = (props) => {
   const fetchData = useFetch();
+  const userCtx = useContext(UserContext);
   const countryRef = useRef<HTMLInputElement>(null);
   const cityRef = useRef<HTMLInputElement>(null);
   const start_dateRef = useRef<HTMLInputElement>(null);
   const end_dateRef = useRef<HTMLInputElement>(null);
 
   const updateTrip = async (id: number) => {
-    const res = await fetchData(`/api/trip/${id}`, "PUT", {
-      country: countryRef.current!.value,
-      city: cityRef.current!.value,
-      start_date: start_dateRef.current!.value,
-      end_date: end_dateRef.current!.value,
-    });
+    const res = await fetchData(
+      "/api/trip/" + id,
+      "PUT",
+      {
+        country: countryRef.current!.value,
+        city: cityRef.current!.value,
+        start_date: start_dateRef.current!.value,
+        end_date: end_dateRef.current!.value,
+      },
+      userCtx.accessToken
+    );
 
     if (res.ok) {
-      await props.refreshTrips();
+      // await props.refreshTrips();
       props.setShowUpdateModal(false);
     } else {
       alert(JSON.stringify(res.data));
@@ -53,6 +60,7 @@ const OverLay: React.FC<OverLayProps> = (props) => {
 
   return (
     <div>
+      <div />
       <br />
       <br />
       <div className="row">
@@ -116,7 +124,7 @@ const UpdateModal: React.FC<UpdateModalProps> = (props) => {
           start_date={props.start_date}
           end_date={props.end_date}
           setShowUpdateModal={props.setShowUpdateModal}
-          refreshTrips={props.refreshTrips}
+          // refreshTrips={props.refreshTrips}
         />,
         document.querySelector("#modal-root")!
       )}

@@ -1,6 +1,7 @@
 import useFetch from "../hooks/useFetch";
 import { Form, Input } from "antd";
 import { useForm } from "antd/es/form/Form";
+import { useNavigate } from "react-router-dom";
 
 type RegisterData = {
   id: number;
@@ -14,20 +15,17 @@ type RegisterData = {
 
 const RegisterDisplay: React.FC = () => {
   const fetchData = useFetch();
+  const nav = useNavigate();
   const [form] = useForm();
 
-  // console.log(form.getFieldsValue());
-
-  const onFinish = (vals: RegisterData) => {
-    console.log("onFinish", vals);
-  };
   const addUser = async (vals: RegisterData) => {
     console.log(form.getFieldsValue());
     console.log(vals);
-    const res = await fetchData("/auth/register", "POST", vals);
+    const res = await fetchData("/auth/register", "POST", vals, "");
 
     if (res.ok) {
       alert("Successfully added user.");
+      nav("/");
     } else {
       alert(JSON.stringify(res.data));
       console.log(res.data);
@@ -49,7 +47,7 @@ const RegisterDisplay: React.FC = () => {
       </Form.Item>
       <Form.Item
         label="Confirm Password"
-        // key={"password"}
+        key={"password"}
         rules={[{ required: true }]}
       >
         <input />
@@ -73,7 +71,6 @@ const RegisterDisplay: React.FC = () => {
       </Form.Item>
       <Form.Item>
         <button type="submit">Register</button>
-        <a href="/">back to login page</a>
       </Form.Item>
     </Form>
   );

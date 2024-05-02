@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Request from "./Request";
 import useFetch from "../hooks/useFetch";
+import UserContext from "../context/user";
 
 interface RequestData {
   id: number;
@@ -9,23 +10,33 @@ interface RequestData {
   description: string;
   country: string;
   city: string;
+  user_name: string;
+  getUserRequest: () => void;
   deleteRequest: (id: number) => void;
 }
 
 const RequestDisplay: React.FC = () => {
   const [request, setRequest] = useState<RequestData[]>([]);
   const fetchData = useFetch();
+  const userCtx = useContext(UserContext);
 
   const countryRef = useRef<HTMLInputElement>(null);
   const cityRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLInputElement>(null);
   const priceRef = useRef<HTMLInputElement>(null);
   const dateRef = useRef<HTMLInputElement>(null);
+  console.log(request);
 
-  const getRequest = async () => {
-    const res = await fetchData("/api/request", "GET", undefined);
+  const getUserRequest = async () => {
+    const res = await fetchData(
+      "/api/request/" + userCtx.name,
+      "GET",
+      undefined,
+      userCtx.accessToken
+    );
 
     if (res.ok) {
+      console.log(res.data);
       setRequest(res.data);
     } else {
       alert(JSON.stringify(res.data));
@@ -34,17 +45,22 @@ const RequestDisplay: React.FC = () => {
   };
 
   const addRequest = async () => {
-    const res = await fetchData("/api/request", "POST", {
-      description: descriptionRef.current!.value,
-      price: priceRef.current!.value,
-      date: dateRef.current!.value,
-      country: countryRef.current!.value,
-      city: cityRef.current!.value,
-      // user_id:
-    });
+    const res = await fetchData(
+      "/api/request",
+      "POST",
+      {
+        description: descriptionRef.current!.value,
+        price: priceRef.current!.value,
+        date: dateRef.current!.value,
+        country: countryRef.current!.value,
+        city: cityRef.current!.value,
+        user_name: userCtx.name,
+      },
+      userCtx.accessToken
+    );
 
     if (res.ok) {
-      getRequest;
+      getUserRequest();
     } else {
       alert(JSON.stringify(res.data));
       console.log(res.data);
@@ -52,9 +68,14 @@ const RequestDisplay: React.FC = () => {
   };
 
   const deleteRequest = async (id: number) => {
-    const res = await fetchData("/api/request/" + id, "DELETE", undefined);
+    const res = await fetchData(
+      "/api/request/" + id,
+      "DELETE",
+      undefined,
+      userCtx.accessToken
+    );
     if (res.ok) {
-      getRequest();
+      getUserRequest();
     } else {
       alert(JSON.stringify(res.data));
       console.log(res.data);
@@ -62,7 +83,7 @@ const RequestDisplay: React.FC = () => {
   };
 
   useEffect(() => {
-    getRequest();
+    getUserRequest();
   }, []);
 
   return (
@@ -126,7 +147,7 @@ const RequestDisplay: React.FC = () => {
           date={item.date}
           price={item.price}
           description={item.description}
-          getRequest={getRequest}
+          getUserRequest={getUserRequest}
           deleteRequest={deleteRequest}
         />
       ))}

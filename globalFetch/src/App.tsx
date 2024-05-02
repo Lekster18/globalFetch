@@ -8,6 +8,9 @@ import RegisterDisplay from "./pages/Register";
 import BrowseDisplay from "./pages/Browse";
 import { useState } from "react";
 import UserContext from "./context/user";
+import Accounts from "./pages/Account";
+import AdminNavBar from "./components/AdminNavBar";
+import TransactionDisplay from "./pages/Transaction";
 
 function App() {
   const [accessToken, setAccessToken] = useState<string>("");
@@ -23,16 +26,25 @@ function App() {
           <BrowserRouter>
             <NavBar />
             <Routes>
-              <Route path="/browse" element={<BrowseDisplay name={name} />} />
+              <Route path="/browse" element={<BrowseDisplay />} />
               <Route path="/trip" element={<TripDisplay />} />
               <Route path="/request" element={<RequestDisplay />} />
+              <Route path="/transaction" element={<TransactionDisplay />} />
+              <Route path="/" element={<Login />} />
+            </Routes>
+          </BrowserRouter>
+        )}
+        {role === "Admin" && accessToken.length > 0 && (
+          <BrowserRouter>
+            <AdminNavBar />
+            <Routes>
+              <Route path="/account" element={<Accounts />} />
               <Route path="/" element={<Login />} />
             </Routes>
           </BrowserRouter>
         )}
         {accessToken.length === 0 && (
           <BrowserRouter>
-            <NavBar />
             <Routes>
               <Route path="/" element={<Login />} />
               <Route path="/register" element={<RegisterDisplay />} />

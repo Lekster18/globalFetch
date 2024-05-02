@@ -1,9 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Trip from "./Trip";
+// import { addTrip, getTrip, AddTripReq } from "../hooks/api";
+import UserContext from "../context/user";
 import useFetch from "../hooks/useFetch";
-import { addTrip, getTrip, AddTripReq } from "../hooks/api";
 
-export interface TripData {
+interface TripData {
   id: number;
   country: string;
   city: string;
@@ -13,8 +14,8 @@ export interface TripData {
 }
 
 const TripDisplay: React.FC = () => {
-  //take in prop to pass in to line 30 in addTripReq
   const [trips, setTrips] = useState<TripData[]>([]);
+  const userCtx = useContext(UserContext);
   const fetchData = useFetch();
 
   const countryRef = useRef<HTMLInputElement>(null);
@@ -22,66 +23,76 @@ const TripDisplay: React.FC = () => {
   const start_dateRef = useRef<HTMLInputElement>(null);
   const end_dateRef = useRef<HTMLInputElement>(null);
 
-  const addTripReq: AddTripReq = {
-    country: countryRef.current?.value ?? "",
-    city: cityRef.current?.value ?? "",
-    start_date: start_dateRef?.current?.value ?? "",
-    end_date: end_dateRef?.current?.value ?? "",
-    // user_id: props.name
-  };
-
-  // const getTrip = async () => {
-  //   const res = await fetchData("/api/trip", "GET", undefined);
-
-  //   if (res.ok) {
-  //     setTrips(res.data);
-  //   } else {
-  //     alert(JSON.stringify(res.data));
-  //     console.log(res.data);
-  //   }
+  // const addTripReq: AddTripReq = {
+  //   country: countryRef.current?.value ?? "",
+  //   city: cityRef.current?.value ?? "",
+  //   start_date: start_dateRef?.current?.value ?? "",
+  //   end_date: end_dateRef?.current?.value ?? "",
+  //   user_name: userCtx.name,
   // };
 
-  // const addTrip = async () => {
-  //   const res = await fetchData("/api/trip", "POST", {
-  //     country: countryRef.current!.value,
-  //     city: cityRef.current!.value,
-  //     start_date: start_dateRef.current!.value,
-  //     end_date: end_dateRef.current!.value,
-  //   });
+  const getUserTrip = async () => {
+    const res = await fetchData(
+      "/api/trip/" + userCtx.name,
+      "GET",
+      undefined,
+      userCtx.accessToken
+    );
 
-  //   if (res.ok) {
-  //     getTrip();
-  //   } else {
-  //     alert(JSON.stringify(res.data));
-  //     console.log(res.data);
-  //   }
-  // };
-
-  // const deleteTrip = async (id: number) => {
-  //   const res = await fetchData("/api/trip/" + id, "DELETE", undefined);
-  //   if (res.ok) {
-  //     getTrip();
-  //   } else {
-  //     alert(JSON.stringify(res.data));
-  //     console.log(res.data);
-  //   }
-  // };
-
-  const refreshTrips = async (): Promise<void> => {
-    const res = await getTrip();
     if (res.ok) {
+      console.log(res.data);
       setTrips(res.data);
+    } else {
+      alert(JSON.stringify(res.data));
+      console.log(res.data);
     }
   };
 
+  const addTrip = async () => {
+    const res = await fetchData(
+      "/api/trip",
+      "POST",
+      {
+        country: countryRef.current!.value,
+        city: cityRef.current!.value,
+        start_date: start_dateRef.current!.value,
+        end_date: end_dateRef.current!.value,
+      },
+      userCtx.accessToken
+    );
+
+    if (res.ok) {
+      getUserTrip();
+    } else {
+      alert(JSON.stringify(res.data));
+      console.log(res.data);
+    }
+  };
+
+  const deleteTrip = async (id: number) => {
+    const res = await fetchData(
+      "/api/trip/" + id,
+      "DELETE",
+      undefined,
+      userCtx.accessToken
+    );
+    if (res.ok) {
+      getUserTrip();
+    } else {
+      alert(JSON.stringify(res.data));
+      console.log(res.data);
+    }
+  };
+
+  // const refreshTrips = async (): Promise<void> => {
+  //   const res = await getTrip();
+  //   if (res.ok) {
+  //     setTrips(res.data);
+  //   }
+  // };
+
   useEffect(() => {
-    const fetch = async () => {
-      const res = await getTrip();
-      if (res.ok) {
-        setTrips(res.data);
-      }
-    };
-    fetch();
+    getUserTrip();
   }, []);
 
   return (
@@ -115,14 +126,7 @@ const TripDisplay: React.FC = () => {
           placeholder="End Date"
           className="col-md-1"
         />
-        <button
-          className="col-md-1"
-          onClick={() =>
-            addTrip(addTripReq).then(() => {
-              refreshTrips();
-            })
-          }
-        >
+        <button className="col-md-1" onClick={addTrip}>
           add
         </button>
       </div>
@@ -143,9 +147,9 @@ const TripDisplay: React.FC = () => {
           city={item.city}
           start_date={item.start_date}
           end_date={item.end_date}
-          refreshTrips={refreshTrips}
-          // getTrip={getTrip}
-          // deleteTrip={deleteTrip}
+          // refreshTrips={refreshTrips}
+          getUserTrip={getUserTrip}
+          deleteTrip={deleteTrip}
         />
       ))}
     </div>

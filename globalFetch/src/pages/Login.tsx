@@ -18,16 +18,20 @@ const Login: React.FC = () => {
   const nav = useNavigate();
 
   const handleLogin = async (vals: LoginData) => {
-    console.log(vals);
-    const res = await fetchData("/auth/login", "POST", vals);
+    const res = await fetchData("/auth/login", "POST", vals, "");
 
     if (res.ok) {
       console.log(res);
       userCtx.setAccessToken(res.data.access);
+      console.log(userCtx.accessToken);
       const decoded: any = jwtDecode(res.data.access);
       userCtx.setRole(decoded.role);
       userCtx.setName(decoded.name);
-      nav("/browse");
+      if (decoded.role === "User") {
+        nav("/browse");
+      } else if (decoded.role === "Admin") {
+        nav("/account");
+      }
     } else {
       alert(JSON.stringify(res.data));
     }

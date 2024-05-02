@@ -8,7 +8,7 @@ interface RequestProps {
   description: string;
   country: string;
   city: string;
-  getRequest: () => void;
+  getUserRequest: () => void;
   deleteRequest: (id: number) => void;
 }
 
@@ -25,7 +25,7 @@ const Request: React.FC<RequestProps> = (props) => {
           price={props.price}
           country={props.country}
           city={props.city}
-          getRequest={props.getRequest}
+          getUserRequest={props.getUserRequest}
           setShowReqUpdateModal={setShowReqUpdateModal}
         />
       )}

@@ -3,12 +3,13 @@ const useFetch = () => {
     endpoint: string,
     method: string,
     body: any,
-    token?: string
+    token: string
   ) => {
     const res = await fetch("http://localhost:5010" + endpoint, {
       method,
       headers: {
         "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(body),
     });
