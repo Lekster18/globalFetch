@@ -6,17 +6,35 @@ const { v4: uuidv4 } = require("uuid");
 
 const getAllUsers = async (req, res) => {
   try {
-    const result = await pool.query("SELECT email, role FROM user");
+    const result = await pool.query(
+      "SELECT id, name, email, country, city, role FROM users"
+    );
     const users = result.rows;
 
     const outputArray = users.map((user) => ({
+      id: user.id,
+      name: user.name,
       email: user.email,
+      country: user.country,
+      city: user.city,
       role: user.role,
     }));
 
     res.json(outputArray);
   } catch (error) {
     console.error(error.message);
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deleteUser = await pool.query("DELETE FROM users WHERE id = $1", [
+      id,
+    ]);
+    res.json("User deleted");
+  } catch (err) {
+    console.error(err.message);
   }
 };
 
@@ -40,7 +58,7 @@ const register = async (req, res) => {
         req.body.email,
         req.body.country,
         req.body.city,
-        req.body.role || "user",
+        req.body.role || "User",
       ]
     );
     res.json({ status: "ok", msg: "User created successfully." });
@@ -61,7 +79,6 @@ const login = async (req, res) => {
         msg: "Username/Password is incorrect. Please try again.",
       });
     }
-    console.log(req.body.password, auth);
     const result = await bcrypt.compare(
       req.body.password,
       auth.rows[0].password
@@ -97,7 +114,7 @@ const refresh = async (req, res) => {
     const decoded = jwt.verify(req.body.refresh, process.env.REFRESH_SECRET);
 
     const claims = {
-      email: decoded.email,
+      name: decoded.name,
       role: decoded.role,
     };
     const access = jwt.sign(claims, process.env.ACCESS_SECRET, {
@@ -111,14 +128,4 @@ const refresh = async (req, res) => {
   }
 };
 
-// const getAllRoles = async (req, res) => {
-//   try {
-//     const roles = await pool.find();
-//     res.json(roles.map((item) => item.role));
-//   } catch (error) {
-//     console.error(error.message);
-//     res.status(400).json({ status: "error", msg: "cannot get role" });
-//   }
-// };
-
-module.exports = { getAllUsers, register, login, refresh };
+module.exports = { getAllUsers, deleteUser, register, login, refresh };

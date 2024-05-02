@@ -2,10 +2,10 @@ const pool = require("../db/db");
 
 const addTrip = async (req, res) => {
   try {
-    const { country, city, start_date, end_date } = req.body;
+    const { country, city, start_date, end_date, user_name } = req.body;
     const newTrip = await pool.query(
-      "INSERT INTO trip (country, city, start_date, end_date) VALUES($1, $2, $3, $4) RETURNING *",
-      [country, city, start_date, end_date]
+      "INSERT INTO trip (country, city, start_date, end_date, user_name) VALUES($1, $2, $3, $4, $5) RETURNING *",
+      [country, city, start_date, end_date, user_name]
     );
     res.json(newTrip);
   } catch (err) {
@@ -22,13 +22,15 @@ const getTrip = async (req, res) => {
   }
 };
 
-const getTripById = async (req, res) => {
+const getTripByUser = async (req, res) => {
   try {
-    const { id } = req.params;
-    const trip = await pool.query("SELECT * FROM trip WHERE id = $1", [id]);
-    res.json(trip.rows[0]);
+    const { user_name } = req.params;
+    const trip = await pool.query("SELECT * FROM trip WHERE user_name = $1", [
+      user_name,
+    ]);
+    res.json(trip.rows);
   } catch (err) {
-    console.error(err.mesaage);
+    console.error(err.message);
   }
 };
 
@@ -56,4 +58,4 @@ const deleteTrip = async (req, res) => {
   }
 };
 
-module.exports = { addTrip, getTrip, getTripById, updateTrip, deleteTrip };
+module.exports = { addTrip, getTrip, getTripByUser, updateTrip, deleteTrip };

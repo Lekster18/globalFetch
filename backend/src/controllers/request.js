@@ -2,10 +2,10 @@ const pool = require("../db/db");
 
 const addRequest = async (req, res) => {
   try {
-    const { description, price, date, country, city, user_id } = req.body;
+    const { description, price, date, country, city, user_name } = req.body;
     const newRequest = await pool.query(
-      "INSERT INTO request(description, price, date, country, city, user_id) VALUES($1, $2, $3, $4, $5) RETURNING *",
-      [description, parseInt(price, 10), date, country, city]
+      "INSERT INTO request(description, price, date, country, city, user_name) VALUES($1, $2, $3, $4, $5, $6) RETURNING *",
+      [description, parseInt(price, 10), date, country, city, user_name]
     );
     res.json(newRequest);
   } catch (err) {
@@ -22,15 +22,18 @@ const getRequest = async (req, res) => {
   }
 };
 
-// const getTripById = async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     const trip = await pool.query("SELECT * FROM trip WHERE id = $1", [id]);
-//     res.json(trip.rows[0]);
-//   } catch (err) {
-//     console.error(err.mesaage);
-//   }
-// };
+const getRequestByUser = async (req, res) => {
+  try {
+    const { user_name } = req.params;
+    const request = await pool.query(
+      "SELECT * FROM request WHERE user_name = $1",
+      [user_name]
+    );
+    res.json(request.rows);
+  } catch (err) {
+    console.error(err.message);
+  }
+};
 
 const updateRequest = async (req, res) => {
   try {
@@ -59,4 +62,10 @@ const deleteRequest = async (req, res) => {
   }
 };
 
-module.exports = { addRequest, getRequest, updateRequest, deleteRequest };
+module.exports = {
+  addRequest,
+  getRequest,
+  getRequestByUser,
+  updateRequest,
+  deleteRequest,
+};
