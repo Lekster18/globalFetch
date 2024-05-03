@@ -1,0 +1,6 @@
+id,name,password,email,country,city,role
+2,Lekster18,$2b$12$bYqk2Y03uuMT2rZwfNyGT.FFW2iFTtYxcdSsgOElqpSQvfHvAoTdy,,SIN,SIN,User
+20,YongLee,$2b$12$Xz3lOik6u8Uj8YBla0vSnu9QLECXj4a6jUlvtK1u/6vU40.vam2Ia,,Thailand,Bangkok,Admin
+21,keeuser,$2b$12$AnhS.FfNnmTIat3/p10wFe1yi2O0.N5XIg3yngg89OkbRYFIjD/pK,,SIN,SIN,User
+22,leks,$2b$12$Fx8JFWxQ4dOrjlEyEozyJ.dZAJbQtmPo23DR86zJBitD608Q8M86q,,SIN,SIN,User
+23,admin,$2b$12$MY9NJUwXVrCInFYvff82HuSRMyO9UYpcTy1mkaFaoJDtMJROAeo3C,,SIN,SIN,Admin

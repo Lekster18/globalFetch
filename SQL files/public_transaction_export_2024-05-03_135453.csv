@@ -1,0 +1,7 @@
+id,seller_name,buyer_name,request_id,status
+12,leks,leks,9,pending
+15,Lekster18,leks,9,pending
+10,keeuser,Lekster18,7,approved
+11,leks,keeuser,8,approved
+13,Lekster18,leks,10,approved
+14,Lekster18,Lekster18,6,approved
