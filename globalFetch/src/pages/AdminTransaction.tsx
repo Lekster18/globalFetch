@@ -53,7 +53,6 @@ const TransactionAdmin: React.FC = () => {
       );
       setPendingTransactions(updatedPendingTransactions);
       setApprovedTransactions([...approvedTransactions, res.data]);
-      console.log(approvedTransactions);
     } else {
       alert(JSON.stringify(res.data));
       console.log(res.data);

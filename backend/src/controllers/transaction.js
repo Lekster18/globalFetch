@@ -16,9 +16,10 @@ const addTransaction = async (req, res) => {
 const getUserTransaction = async (req, res) => {
   try {
     const { seller_name } = req.params;
+    const { status } = req.body;
     const transaction = await pool.query(
-      "SELECT * FROM transaction JOIN request ON transaction.request_id = request.id WHERE seller_name = $1",
-      [seller_name]
+      "SELECT * FROM transaction JOIN request ON transaction.request_id = request.id WHERE (seller_name = $1 AND status = $2)",
+      [seller_name, status]
     );
     res.json(transaction.rows);
   } catch (err) {

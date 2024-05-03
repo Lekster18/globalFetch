@@ -9,8 +9,8 @@ const router = express.Router();
 const { authUser, authAdmin } = require("../middleware/auth");
 
 router.post("/transaction", authUser, addTransaction);
-router.get("/transaction/:seller_name", authUser, getUserTransaction);
-router.get("/transaction", authAdmin, getTransaction);
+router.post("/transaction/:seller_name", authUser, getUserTransaction);
+router.get("/transaction/", authAdmin, getTransaction);
 router.put("/transaction/:id", authAdmin, updateTransaction);
 
 module.exports = router;
